@@ -1,0 +1,190 @@
+/* Grilla Responsiva de Productos */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 2rem;
+}
+
+/* Tarjeta Cuadrada Interactivas */
+.caluga-card {
+  background: var(--card-bg);
+  border: 1px solid #381d42;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto al pasar el mouse por la tarjeta */
+.caluga-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--neon-pink);
+  box-shadow: 0 10px 20px rgba(255, 42, 133, 0.25);
+}
+
+/* Etiqueta flotante del Videojuego */
+.card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(18, 9, 19, 0.85);
+  color: var(--neon-cyan);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--neon-cyan);
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+/* Marco de la Imagen (Cuadrado) */
+.card-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #120913;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.caluga-card:hover .card-img {
+  transform: scale(1.08);
+}
+
+/* Información del producto dentro de la tarjeta */
+.card-content {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.card-content h3 {
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 0.4rem;
+}
+
+.card-desc {
+  color: var(--text-sub);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin-bottom: 1.2rem;
+}
+
+/* Pie de la tarjeta (Precio y Botón) */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #2d1836;
+  padding-top: 0.8rem;
+}
+
+.price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--neon-gold);
+}
+
+.btn-buy {
+  background: var(--neon-pink);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.caluga-card:hover .btn-buy {
+  background: var(--neon-cyan);
+  color: #000000;
+}
+
+/* Tablets y Celulares (<= 768px) */
+@media (max-width: 768px) {
+  .product-grid {
+    gap: 1.2rem;
+  }
+
+  .card-content {
+    padding: 1rem;
+  }
+
+  .card-content h3 {
+    font-size: 1rem;
+  }
+
+  .card-desc {
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* Pantallas Pequeñas (<= 480px) */
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr; /* Una sola columna vertical */
+  }
+}
+
+/* Pantallas Micro (<= 320px / 240px) */
+@media (max-width: 320px) {
+  .product-grid {
+    gap: 0.8rem;
+  }
+
+  .caluga-card {
+    border-radius: 8px;
+  }
+
+  .card-badge {
+    font-size: 0.55rem;
+    padding: 0.2rem 0.4rem;
+    top: 6px;
+    left: 6px;
+  }
+
+  .card-content {
+    padding: 0.6rem;
+  }
+
+  .card-content h3 {
+    font-size: 0.88rem;
+  }
+
+  .card-desc {
+    font-size: 0.72rem;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .card-footer {
+    padding-top: 0.5rem;
+  }
+
+  .price {
+    font-size: 0.95rem;
+  }
+
+  .btn-buy {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+  }
+}

@@ -1,0 +1,168 @@
+/* Header Principal */
+header {
+  background: rgba(31, 16, 36, 0.95);
+  border-bottom: 3px solid var(--neon-pink);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+header nav {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+header nav section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Logo Tipográfico Neón */
+.logo {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 1.5px;
+}
+
+/* Letras de GAME (Blanco Brillante) */
+.logo-game {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+/* Letras de BITES (Rosa Neón Brilante) */
+.logo-bites {
+  color: var(--neon-pink) !important;
+  text-shadow: 0 0 10px rgba(255, 42, 133, 0.9), 0 0 20px rgba(255, 42, 133, 0.6);
+}
+
+/* Emojis */
+.logo-icon {
+  font-size: 1.4rem;
+  margin-left: 0.4rem;
+}
+
+/* Logo Footer */
+.logo-footer {
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Enlaces de Navegación */
+.nav-links-section a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+.nav-links-section a:hover,
+.nav-links-section a.active {
+  color: var(--neon-cyan);
+}
+
+.btn-login {
+  background: var(--neon-pink);
+  color: #ffffff !important;
+  padding: 0.4rem 1.1rem;
+  border-radius: 20px;
+  box-shadow: 0 0 8px rgba(255, 42, 133, 0.4);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  header nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  header nav section {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/*RESPONSIV0*/
+
+/* Tablets y Celulares (<= 768px) */
+@media (max-width: 768px) {
+  header {
+    padding: 0.8rem 1rem;
+  }
+
+  header nav {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  header nav section {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .nav-links-section a {
+    font-size: 0.85rem;
+  }
+}
+
+/* Pantallas Pequeñas (<= 480px) */
+@media (max-width: 480px) {
+  header nav section {
+    gap: 0.6rem;
+  }
+
+  .logo {
+    font-size: 1.3rem;
+  }
+
+  .btn-login {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Pantallas Micro (<= 320px / 240px) */
+@media (max-width: 320px) {
+  header {
+    padding: 0.5rem 0.2rem;
+  }
+
+  .logo {
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+  }
+
+  .logo-icon {
+    font-size: 0.9rem;
+  }
+
+  .nav-links-section {
+    gap: 0.3rem 0.5rem;
+  }
+
+  .nav-links-section a {
+    font-size: 0.72rem;
+  }
+
+  .btn-login {
+    font-size: 0.72rem;
+    padding: 0.28rem 0.5rem;
+  }
+}
