@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -32,22 +32,27 @@
         </section>
     </nav>
 </header>
+
 <section class="page-hero">
     <h1>Iniciar sesión</h1>
     <p>Accede a tu cuenta GameBites.</p>
 </section>
+
 <main class="main-container">
     <div class="content-card">
-        <form class="form-grid" onsubmit="event.preventDefault(); window.location.href='cuenta.html';">
+        <form id="login-form" class="form-grid">
             <label>Correo
-                <input required type="email">
+                <input id="login-email" required type="email" placeholder="admin@gamebites.cl">
             </label>
             <label>Contraseña
-                <input required type="password">
+                <input id="login-password" required type="password" placeholder="••••••••">
             </label>
             <button class="btn-primary" type="submit">Ingresar</button>
             <a class="back-link" href="../index.html">← Volver al inicio</a>
         </form>
     </div>
 </main>
-<script src="../scripts/script.js"></script></body></html>
+
+<script src="../scripts/script.js"></script>
+</body>
+</html>
