@@ -127,6 +127,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const ordersTableBody = document.getElementById("orders-table-body");
   const addProductForm = document.getElementById("add-product-form");
   const loginForm = document.getElementById("login-form");
+  const contactForm = document.getElementById("contact-form");
+
+  // FORMULARIO DE CONTACTO
+  if (contactForm) {
+    contactForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("contact-msg");
+      if (msg) {
+        msg.style.display = "block";
+        contactForm.reset();
+        setTimeout(() => { msg.style.display = "none"; }, 4000);
+      }
+    });
+  }
 
   // FORMULARIO DE LOGIN
   if (loginForm) {
@@ -140,7 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("¡Bienvenido al Panel de Administración!");
         window.location.href = isPagesDir ? "admin.html" : "pages/admin.html";
       } else {
-        // Acepta al cliente de prueba o cualquier correo
         const namePart = email.split('@')[0];
         setCurrentUser({ email: email, name: namePart, role: "client" });
         alert(`¡Bienvenido de nuevo, ${namePart}!`);
@@ -431,12 +444,10 @@ window.deleteProductFromAdmin = function(productId) {
   }
 };
 
-// CHECKOUT CON VALIDACIÓN DE SESIÓN (REQUERIMIENTO DEL PROFESOR)
 window.processCheckout = function() {
   const isPagesDir = window.location.pathname.toLowerCase().includes("pages");
   const currentUser = getCurrentUser();
 
-  // 1. Validar que el usuario esté logueado
   if (!currentUser) {
     alert("⚠️ Debes iniciar sesión para realizar la compra.");
     window.location.href = isPagesDir ? "login.html" : "pages/login.html";
