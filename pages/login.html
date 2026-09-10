@@ -1,9 +1,9 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión | GameBites</title>
+    <title>Iniciar Sesión | GameBites</title>
     <link rel="stylesheet" href="../styles/global.css">
     <link rel="stylesheet" href="../styles/header.css">
     <link rel="stylesheet" href="../styles/caluga.css">
@@ -28,30 +28,58 @@
         </section>
         <section class="user-section">
             <a href="carrito.html" class="cart-link">🛒 <span>Carrito</span> <span class="cart-count">0</span></a>
-            <a href="login.html" class="btn-login">Iniciar Sesión</a>
+            <div id="user-nav-container">
+                <a href="login.html" class="btn-login active">Iniciar Sesión</a>
+            </div>
         </section>
     </nav>
 </header>
 
 <section class="page-hero">
-    <h1>Iniciar sesión</h1>
-    <p>Accede a tu cuenta GameBites.</p>
+    <h1>Acceso de Usuario</h1>
+    <p>Inicia sesión como Cliente para comprar o como Administrador para gestionar la tienda.</p>
 </section>
 
-<main class="main-container">
-    <div class="content-card">
-        <form id="login-form" class="form-grid">
-            <label>Correo
-                <input id="login-email" required type="email" placeholder="admin@gamebites.cl">
-            </label>
-            <label>Contraseña
-                <input id="login-password" required type="password" placeholder="••••••••">
-            </label>
-            <button class="btn-primary" type="submit">Ingresar</button>
-            <a class="back-link" href="../index.html">← Volver al inicio</a>
+<main class="main-container" style="max-width: 480px; margin: 0 auto; padding: 20px;">
+    <div style="background: #161224; padding: 30px; border-radius: 16px; border: 1px solid rgba(255, 0, 85, 0.4); color: #fff;">
+        <form id="login-form" style="display: flex; flex-direction: column; gap: 18px;">
+            <div>
+                <label style="display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 6px;">Correo electrónico:</label>
+                <input type="email" id="login-email" required placeholder="cliente@gamebites.cl" style="width: 100%; padding: 12px; background: #0b0813; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 1rem;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 6px;">Contraseña:</label>
+                <input type="password" id="login-password" required placeholder="••••••••" style="width: 100%; padding: 12px; background: #0b0813; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 1rem;">
+            </div>
+
+            <button type="submit" style="background: linear-gradient(135deg, #ff0055, #e63946); color: #fff; border: none; padding: 14px; font-size: 1rem; font-weight: 800; border-radius: 8px; cursor: pointer; margin-top: 10px;">
+                Ingresar a GameBites
+            </button>
         </form>
+
+        <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem; color: #aaa; line-height: 1.6;">
+            <p style="margin: 0 0 5px 0;"><strong style="color:#00f2fe;">Credenciales de Prueba:</strong></p>
+            <p style="margin: 0;">👤 <strong>Cliente:</strong> cliente@gamebites.cl / 123456</p>
+            <p style="margin: 0;">⚙️ <strong>Admin:</strong> admin@gamebites.cl / admin123</p>
+        </div>
     </div>
 </main>
+
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-col brand-col">
+            <a href="../index.html" class="logo logo-footer">
+                <span class="logo-game">GAME</span>
+                <span class="logo-bites">BITES</span>
+                <span class="logo-icon">🎮🍫</span>
+            </a>
+            <p class="footer-address">Av. Tobalaba 720 / Santiago</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 GameBites - Chocolatería Gamer.</p>
+    </div>
+</footer>
 
 <script src="../scripts/script.js"></script>
 </body>

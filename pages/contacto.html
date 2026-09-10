@@ -24,37 +24,87 @@
             <a href="nosotros.html">Nosotros</a>
             <a href="promociones.html">Promociones</a>
             <a href="productos.html">Productos</a>
-            <a href="contacto.html">Contacto</a>
+            <a href="contacto.html" class="active">Contacto</a>
         </section>
         <section class="user-section">
             <a href="carrito.html" class="cart-link">🛒 <span>Carrito</span> <span class="cart-count">0</span></a>
-            <a href="login.html" class="btn-login">Iniciar Sesión</a>
+            <div id="user-nav-container">
+                <a href="login.html" class="btn-login">Iniciar Sesión</a>
+            </div>
         </section>
     </nav>
 </header>
+
 <section class="page-hero">
     <h1>Contacto</h1>
     <p>¿Tienes dudas? Escríbenos.</p>
 </section>
-<main class="main-container">
-    <div class="content-card">
-        <form class="form-grid" onsubmit="event.preventDefault(); window.location.href='confirmacion.html';">
-            <label>Nombre
-                <input required type="text" placeholder="Tu nombre">
-            </label>
-            <label>Correo
-                <input required type="email" placeholder="tu@correo.com">
-            </label>
-            <label>Mensaje
-                <textarea required placeholder="Escribe tu consulta"></textarea>
-            </label>
-            <button class="btn-primary" type="submit">Enviar mensaje</button>
+
+<main class="main-container" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background: #161224; padding: 30px; border-radius: 16px; border: 1px solid rgba(255, 0, 85, 0.4); color: #fff;">
+        <form id="contact-form" style="display: flex; flex-direction: column; gap: 18px;">
+            <div>
+                <label style="display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 6px;">Nombre:</label>
+                <input type="text" id="contact-name" required placeholder="Tu nombre" style="width: 100%; padding: 12px; background: #0b0813; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 1rem;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 6px;">Correo:</label>
+                <input type="email" id="contact-email" required placeholder="tu@correo.com" style="width: 100%; padding: 12px; background: #0b0813; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 1rem;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 6px;">Mensaje:</label>
+                <textarea id="contact-message" required rows="4" placeholder="Escribe tu consulta..." style="width: 100%; padding: 12px; background: #0b0813; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 1rem; resize: vertical;"></textarea>
+            </div>
+
+            <button type="submit" style="background: #00f2fe; color: #000; border: none; padding: 14px; font-size: 1rem; font-weight: 800; border-radius: 8px; cursor: pointer;">
+                Enviar mensaje
+            </button>
         </form>
+
+        <div id="contact-msg" style="display: none; margin-top: 20px; padding: 12px; background: rgba(0, 242, 254, 0.15); border: 1px solid #00f2fe; color: #00f2fe; border-radius: 8px; text-align: center; font-weight: bold;">
+            ✔ ¡Mensaje enviado con éxito! Te responderemos a la brevedad.
+        </div>
     </div>
 </main>
-<footer class="main-footer"><div class="footer-container"><div class="footer-col brand-col"><a href="../index.html" class="logo logo-footer"><span class="logo-game">GAME</span><span class="logo-bites">BITES</span><span class="logo-icon">🎮🍫</span></a><p class="footer-address">Av. Tobalaba 720 / Santiago</p><div class="social-links"><a href="contacto.html">Instagram</a></div></div>
-<div class="footer-col"><h4>Productos</h4><ul><li><a href="productos.html">Bombones Gamer</a></li><li><a href="productos.html">Boxes</a></li><li><a href="productos.html">Ediciones Limitadas</a></li></ul></div>
-<div class="footer-col"><h4>GameBites</h4><ul><li><a href="nosotros.html">Nosotros</a></li><li><a href="promociones.html">Promociones</a></li></ul></div>
-<div class="footer-col"><h4>Servicio al Cliente</h4><ul><li><a href="contacto.html">Contacto</a></li><li><a href="faq.html">Preguntas Frecuentes</a></li></ul></div></div>
-<div class="footer-bottom"><p>&copy; 2026 GameBites - Chocolatería Gamer. Todos los derechos reservados.</p></div></footer>
-<script src="../scripts/script.js"></script></body></html>
+
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-col brand-col">
+            <a href="../index.html" class="logo logo-footer">
+                <span class="logo-game">GAME</span>
+                <span class="logo-bites">BITES</span>
+                <span class="logo-icon">🎮🍫</span>
+            </a>
+            <p class="footer-address">Av. Tobalaba 720 / Santiago</p>
+            <div class="social-links"><a href="contacto.html">Instagram</a></div>
+        </div>
+        <div class="footer-col">
+            <h4>Productos</h4>
+            <ul>
+                <li><a href="productos.html">Bombones Gamer</a></li>
+                <li><a href="promociones.html">Boxes</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>GameBites</h4>
+            <ul>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="promociones.html">Promociones</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Servicio al Cliente</h4>
+            <ul>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="faq.html">Preguntas Frecuentes</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 GameBites - Chocolatería Gamer.</p>
+    </div>
+</footer>
+
+<script src="../scripts/script.js"></script>
+</body>
+</html>

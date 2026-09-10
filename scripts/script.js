@@ -1,6 +1,5 @@
-// Catálogo completo de Productos y Boxes Gamer
-const PRODUCTS = [
-  // --- 1. BOMBONES INDIVIDUALES ---
+// --- BASE DE DATOS INICIAL ---
+const DEFAULT_PRODUCTS = [
   [1, "PokéBall Surprise", "POKÉMON", "pokeball.jpg", 12990, "Esfera de chocolate de leche con centro cremoso de maracuyá y trufas de avellana.", "individual"],
   [2, "Bloque Redstone", "MINECRAFT", "redstone.jpg", 8990, "Cubo artesanal de chocolate blanco con menta suave y corazón crujiente de frambuesa.", "individual"],
   [3, "Fatality Skull", "MORTAL KOMBAT", "skull.jpg", 14990, "Cráneo de chocolate 70% cacao con relleno líquido de mermelada artesanal de frutos rojos.", "individual"],
@@ -9,8 +8,6 @@ const PRODUCTS = [
   [6, "Cristal Hextech", "LEAGUE OF LEGENDS", "hextech.jpg", 13990, "Bombón de chocolate blanco artesanal con crema suave de arándanos y perlas crujientes.", "individual"],
   [7, "Trifuerza de Hyrule", "ZELDA", "triforce.jpg", 15990, "Chocolate rubio caramelizado con polvo dorado, manjar suave y caramelo a la sal de mar.", "individual"],
   [8, "Poción de Escudo 100", "FORTNITE", "shield.jpg", 11990, "Frasco de chocolate 70% cacao con ganache cremoso de frutos del bosque y chispas efervescentes.", "individual"],
-
-  // --- 2. BOXES Y PROMOCIONES ---
   [9, "Ultra Ball Master Box", "POKÉMON SPECIAL", "box-pokemon.jpg", 29990, "Caja metálica coleccionable con 1 PokéBall de chocolate, 3 Piedras Evolutivas y sticker holográfico.", "box"],
   [10, "Cofre Legendario de Hyrule", "ZELDA COLLECTION", "box-zelda.jpg", 32990, "Edición de lujo con 3 Trifuerzas doradas, 5 Rubíes comestibles y réplica Master Sword de chocolate.", "box"],
   [11, "Cyberpunk Overclock Pack", "CYBERPUNK 2077", "box-cyberpunk.jpg", 24990, "Caja neón con chocolates efervescentes, chispas de caramelo ácido y centro energizante.", "box"],
@@ -21,7 +18,38 @@ const PRODUCTS = [
   [16, "Victory Royale Loot Box", "FORTNITE BATTLE", "box-fortnite.jpg", 25990, "Caja con botellitas de poción de escudo en chocolate blanco, llamas de praliné y chispas efervescentes.", "box"]
 ];
 
-// --- GESTIÓN DE CARRITO (localStorage) ---
+function getProducts() {
+  const stored = localStorage.getItem('gamebites_products');
+  if (!stored) {
+    localStorage.setItem('gamebites_products', JSON.stringify(DEFAULT_PRODUCTS));
+    return DEFAULT_PRODUCTS;
+  }
+  return JSON.parse(stored);
+}
+
+function saveProducts(products) {
+  localStorage.setItem('gamebites_products', JSON.stringify(products));
+}
+
+let PRODUCTS = getProducts();
+
+// --- SESIÓN DE USUARIO Y CARRITO ---
+function getCurrentUser() {
+  try {
+    return JSON.parse(localStorage.getItem('gamebites_user'));
+  } catch(e) {
+    return null;
+  }
+}
+
+function setCurrentUser(user) {
+  if (user) {
+    localStorage.setItem('gamebites_user', JSON.stringify(user));
+  } else {
+    localStorage.removeItem('gamebites_user');
+  }
+}
+
 function getCart() {
   try {
     return JSON.parse(localStorage.getItem('gamebites_cart') || '[]');
@@ -43,17 +71,83 @@ function updateCartCount() {
   });
 }
 
-// --- LÓGICA DE INICIALIZACIÓN ---
+function getOrders() {
+  try {
+    return JSON.parse(localStorage.getItem('gamebites_orders') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+// --- ACTUALIZAR HEADER SEGÚN SESIÓN ---
+function renderUserHeader(isPagesDir) {
+  const userContainer = document.getElementById('user-nav-container');
+  if (!userContainer) return;
+
+  const user = getCurrentUser();
+  const loginPath = isPagesDir ? 'login.html' : 'pages/login.html';
+  const adminPath = isPagesDir ? 'admin.html' : 'pages/admin.html';
+
+  if (user) {
+    let extraBtn = '';
+    if (user.role === 'admin') {
+      extraBtn = `<a href="${adminPath}" class="btn-login" style="background:#00f2fe; color:#000; margin-right:8px;">⚙️ Admin</a>`;
+    }
+    userContainer.innerHTML = `
+      <div style="display:flex; align-items:center; gap:8px;">
+        ${extraBtn}
+        <span style="color:#fff; font-size:0.85rem; font-weight:bold;">👤 ${user.name || 'Gamer'}</span>
+        <button onclick="logoutUser()" style="background:transparent; border:1px solid rgba(255,255,255,0.3); color:#ff0055; padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer; font-weight:bold;">Salir</button>
+      </div>
+    `;
+  } else {
+    userContainer.innerHTML = `<a href="${loginPath}" class="btn-login">Iniciar Sesión</a>`;
+  }
+}
+
+window.logoutUser = function() {
+  setCurrentUser(null);
+  window.location.reload();
+};
+
+// --- DOM READY ---
 document.addEventListener("DOMContentLoaded", () => {
+  PRODUCTS = getProducts();
   updateCartCount();
+
+  const isPagesDir = window.location.pathname.toLowerCase().includes("pages");
+  renderUserHeader(isPagesDir);
 
   const productsContainer = document.getElementById("products-grid");
   const promoContainer = document.getElementById("promotions-grid");
   const detailContainer = document.getElementById("product-detail");
   const cartItemsContainer = document.getElementById("cart-items");
   const cartTotalContainer = document.getElementById("cart-total");
+  const adminTableBody = document.getElementById("admin-table-body");
+  const ordersTableBody = document.getElementById("orders-table-body");
+  const addProductForm = document.getElementById("add-product-form");
+  const loginForm = document.getElementById("login-form");
 
-  const isPagesDir = window.location.pathname.toLowerCase().includes("pages");
+  // FORMULARIO DE LOGIN
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim().toLowerCase();
+      const pass = document.getElementById("login-password").value;
+
+      if (email === "admin@gamebites.cl" && (pass === "admin123" || pass === "admin")) {
+        setCurrentUser({ email: email, name: "Admin", role: "admin" });
+        alert("¡Bienvenido al Panel de Administración!");
+        window.location.href = isPagesDir ? "admin.html" : "pages/admin.html";
+      } else {
+        // Acepta al cliente de prueba o cualquier correo
+        const namePart = email.split('@')[0];
+        setCurrentUser({ email: email, name: namePart, role: "client" });
+        alert(`¡Bienvenido de nuevo, ${namePart}!`);
+        window.location.href = isPagesDir ? "carrito.html" : "pages/carrito.html";
+      }
+    });
+  }
 
   if (productsContainer) {
     productsContainer.innerHTML = PRODUCTS.map(p => renderCard(p, isPagesDir)).join("");
@@ -68,14 +162,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = parseInt(urlParams.get("id"));
     const product = PRODUCTS.find(p => p[0] === productId);
-
-    if (product) {
-      renderDetailView(product, detailContainer, isPagesDir);
-    }
+    if (product) renderDetailView(product, detailContainer, isPagesDir);
   }
 
   if (cartItemsContainer) {
     renderCartView(cartItemsContainer, cartTotalContainer, isPagesDir);
+  }
+
+  if (adminTableBody) {
+    renderAdminTable(adminTableBody);
+    renderOrdersTable(ordersTableBody);
+  }
+
+  if (addProductForm) {
+    addProductForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const newId = PRODUCTS.length > 0 ? Math.max(...PRODUCTS.map(p => p[0])) + 1 : 1;
+      const title = document.getElementById("admin-title").value;
+      const category = document.getElementById("admin-category").value;
+      const img = document.getElementById("admin-img").value;
+      const price = parseInt(document.getElementById("admin-price").value);
+      const desc = document.getElementById("admin-desc").value;
+      const type = document.getElementById("admin-type").value;
+
+      PRODUCTS.push([newId, title, category, img, price, desc, type]);
+      saveProducts(PRODUCTS);
+      renderAdminTable(adminTableBody);
+      addProductForm.reset();
+      alert("¡Producto agregado con éxito al catálogo!");
+    });
   }
 });
 
@@ -111,7 +226,7 @@ function renderDetailView(product, container, isPagesDir) {
   container.style.visibility = "visible";
 
   container.innerHTML = `
-    <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center; width: 100%; padding: 35px; background: #161224; border-radius: 16px; border: 1px solid rgba(255, 0, 85, 0.4); color: #ffffff; box-shadow: 0 0 25px rgba(255, 0, 85, 0.15);">
+    <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center; width: 100%; padding: 35px; background: #161224; border-radius: 16px; border: 1px solid rgba(255, 0, 85, 0.4); color: #ffffff;">
       <div style="flex: 1; min-width: 280px; text-align: center;">
         <img src="${imagePath}" alt="${title}" style="width: 100%; max-width: 420px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 2px solid rgba(255, 255, 255, 0.1);">
       </div>
@@ -130,7 +245,7 @@ function renderDetailView(product, container, isPagesDir) {
             <button type="button" onclick="changeQty(1)" style="width: 40px; height: 45px; background: rgba(255,255,255,0.08); color: #fff; border: none; font-size: 1.3rem; font-weight: bold; cursor: pointer;">+</button>
           </div>
 
-          <button onclick="addToCartFromDetail(${id})" style="background: linear-gradient(135deg, #ff0055, #e63946); color: white; border: none; padding: 14px 28px; font-size: 1rem; font-weight: 800; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);">
+          <button onclick="addToCartFromDetail(${id})" style="background: linear-gradient(135deg, #ff0055, #e63946); color: white; border: none; padding: 14px 28px; font-size: 1rem; font-weight: 800; border-radius: 8px; cursor: pointer;">
             🛒 Agregar al Carrito
           </button>
         </div>
@@ -147,7 +262,6 @@ function renderDetailView(product, container, isPagesDir) {
   `;
 }
 
-// --- RENDERIZADO DEL CARRITO DE COMPRAS ---
 function renderCartView(cartContainer, totalContainer, isPagesDir) {
   const cart = getCart();
 
@@ -163,14 +277,11 @@ function renderCartView(cartContainer, totalContainer, isPagesDir) {
   }
 
   let grandTotal = 0;
-  let validItemsCount = 0;
 
   const itemsHTML = cart.map(item => {
-    // Comparación flexible (==) para aceptar ID tipo String y Number
     const product = PRODUCTS.find(p => p[0] == item.id);
     if (!product) return "";
 
-    validItemsCount++;
     const [id, title, category, img, price] = product;
     const qty = parseInt(item.quantity) || 1;
     const subtotal = price * qty;
@@ -180,7 +291,7 @@ function renderCartView(cartContainer, totalContainer, isPagesDir) {
     return `
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; background: #161224; padding: 15px 25px; border-radius: 12px; border: 1px solid rgba(255, 0, 85, 0.3); flex-wrap: wrap;">
         <div style="display: flex; align-items: center; gap: 20px;">
-          <img src="${imagePath}" alt="${title}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+          <img src="${imagePath}" alt="${title}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px;">
           <div>
             <h4 style="margin: 0; color: #fff; font-size: 1.1rem;">${title}</h4>
             <p style="margin: 5px 0 0 0; color: #ff0055; font-weight: bold;">$${price.toLocaleString("es-CL")} c/u</p>
@@ -200,20 +311,59 @@ function renderCartView(cartContainer, totalContainer, isPagesDir) {
     `;
   }).join("");
 
-  if (validItemsCount === 0) {
-    localStorage.removeItem('gamebites_cart');
-    updateCartCount();
-    renderCartView(cartContainer, totalContainer, isPagesDir);
+  cartContainer.innerHTML = itemsHTML;
+  if (totalContainer) totalContainer.textContent = `$${grandTotal.toLocaleString("es-CL")}`;
+}
+
+function renderAdminTable(tbody) {
+  if (!tbody) return;
+  tbody.innerHTML = PRODUCTS.map(p => {
+    const [id, title, category, img, price, desc, type] = p;
+    return `
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <td style="padding: 12px 10px;">${id}</td>
+        <td style="padding: 12px 10px; font-weight: bold;">${title}</td>
+        <td style="padding: 12px 10px; color: #00f2fe;">${category}</td>
+        <td style="padding: 12px 10px;">${type === 'box' ? '🎁 Box' : '🍫 Individual'}</td>
+        <td style="padding: 12px 10px; color: #ff0055; font-weight: bold;">$${price.toLocaleString("es-CL")}</td>
+        <td style="padding: 12px 10px; text-align: center;">
+          <button onclick="deleteProductFromAdmin(${id})" style="background: transparent; color: #ff0055; border: 1px solid #ff0055; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">Eliminar</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderOrdersTable(tbody) {
+  if (!tbody) return;
+  const orders = getOrders();
+
+  let totalSales = 0;
+  orders.forEach(o => totalSales += o.total);
+
+  const salesEl = document.getElementById("metric-total-sales");
+  const countEl = document.getElementById("metric-orders-count");
+
+  if (salesEl) salesEl.textContent = `$${totalSales.toLocaleString("es-CL")}`;
+  if (countEl) countEl.textContent = orders.length;
+
+  if (orders.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px; color:#aaa;">Aún no se han registrado ventas.</td></tr>`;
     return;
   }
 
-  cartContainer.innerHTML = itemsHTML;
-  if (totalContainer) {
-    totalContainer.textContent = `$${grandTotal.toLocaleString("es-CL")}`;
-  }
+  tbody.innerHTML = orders.map(o => `
+    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+      <td style="padding: 12px 10px; font-weight: bold; color: #00f2fe;">#${o.id}</td>
+      <td style="padding: 12px 10px; color: #aaa;">${o.date}</td>
+      <td style="padding: 12px 10px; color: #ff0055; font-weight: bold;">${o.client || 'Cliente'}</td>
+      <td style="padding: 12px 10px;">${o.itemsSummary}</td>
+      <td style="padding: 12px 10px; text-align: right; color: #00f2fe; font-weight: bold;">$${o.total.toLocaleString("es-CL")}</td>
+    </tr>
+  `).join("");
 }
 
-// --- FUNCIONES INTERACTIVAS GLOBALES ---
+// FUNCIONES INTERACTIVAS
 window.changeQty = function(delta) {
   const input = document.getElementById("product-qty");
   if (!input) return;
@@ -270,4 +420,60 @@ window.removeCartItem = function(productId) {
   const cartTotalContainer = document.getElementById("cart-total");
   const isPagesDir = window.location.pathname.toLowerCase().includes("pages");
   if (cartItemsContainer) renderCartView(cartItemsContainer, cartTotalContainer, isPagesDir);
+};
+
+window.deleteProductFromAdmin = function(productId) {
+  if (confirm("¿Estás seguro de que deseas eliminar este producto del catálogo?")) {
+    PRODUCTS = PRODUCTS.filter(p => p[0] != productId);
+    saveProducts(PRODUCTS);
+    const adminTableBody = document.getElementById("admin-table-body");
+    if (adminTableBody) renderAdminTable(adminTableBody);
+  }
+};
+
+// CHECKOUT CON VALIDACIÓN DE SESIÓN (REQUERIMIENTO DEL PROFESOR)
+window.processCheckout = function() {
+  const isPagesDir = window.location.pathname.toLowerCase().includes("pages");
+  const currentUser = getCurrentUser();
+
+  // 1. Validar que el usuario esté logueado
+  if (!currentUser) {
+    alert("⚠️ Debes iniciar sesión para realizar la compra.");
+    window.location.href = isPagesDir ? "login.html" : "pages/login.html";
+    return;
+  }
+
+  const cart = getCart();
+  if (cart.length === 0) {
+    alert("Tu carrito está vacío.");
+    return;
+  }
+
+  let total = 0;
+  const itemsList = [];
+
+  cart.forEach(item => {
+    const product = PRODUCTS.find(p => p[0] == item.id);
+    if (product) {
+      const subtotal = product[4] * item.quantity;
+      total += subtotal;
+      itemsList.push(`${product[1]} (${item.quantity}x)`);
+    }
+  });
+
+  const orders = getOrders();
+  const newOrder = {
+    id: Math.floor(1000 + Math.random() * 9000),
+    date: new Date().toLocaleDateString('es-CL'),
+    client: currentUser.email,
+    itemsSummary: itemsList.join(", "),
+    total: total
+  };
+
+  orders.unshift(newOrder);
+  localStorage.setItem('gamebites_orders', JSON.stringify(orders));
+
+  saveCart([]);
+  alert(`¡Gracias por tu compra, ${currentUser.name}! Se ha registrado tu pedido correctamente.`);
+  window.location.reload();
 };

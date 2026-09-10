@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin | GameBites</title>
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/header.css">
+    <link rel="stylesheet" href="../styles/caluga.css">
+    <link rel="stylesheet" href="../styles/pages.css">
+</head>
+<body>
+<header>
+    <nav>
+        <section class="brand-section">
+            <a href="../index.html" class="logo">
+                <span class="logo-game">GAME</span>
+                <span class="logo-bites">BITES</span>
+                <span class="logo-icon">🎮🍫</span>
+            </a>
+        </section>
+        <section class="nav-links-section">
+            <a href="../index.html">Inicio</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="promociones.html">Promociones</a>
+            <a href="productos.html">Productos</a>
+            <a href="contacto.html">Contacto</a>
+        </section>
+        <section class="user-section">
+            <a href="carrito.html" class="cart-link">🛒 <span>Carrito</span> <span class="cart-count">0</span></a>
+            <a href="admin.html" class="btn-login active" style="background:#00f2fe; color:#000;">Admin</a>
+        </section>
+    </nav>
+</header>
+
+<section class="page-hero">
+    <h1>⚙️ Panel de Administración</h1>
+    <p>Revisa métricas de ventas, compras realizadas y gestión de catálogo.</p>
+</section>
+
+<main class="main-container" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+    <!-- TARJETAS DE MÉTRICAS -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div style="background: #161224; padding: 20px; border-radius: 12px; border: 1px solid rgba(0, 242, 254, 0.4); text-align: center; color: #fff;">
+            <h4 style="margin: 0; color: #aaa; font-size: 0.9rem;">Ventas Totales</h4>
+            <span id="metric-total-sales" style="font-size: 2rem; font-weight: bold; color: #00f2fe; display: block; margin-top: 10px;">$0</span>
+        </div>
+        <div style="background: #161224; padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 0, 85, 0.4); text-align: center; color: #fff;">
+            <h4 style="margin: 0; color: #aaa; font-size: 0.9rem;">Pedidos Procesados</h4>
+            <span id="metric-orders-count" style="font-size: 2rem; font-weight: bold; color: #ff0055; display: block; margin-top: 10px;">0</span>
+        </div>
+    </div>
+
+    <!-- TABLA DE VENTAS Y COMPRAS REALIZADAS -->
+    <div style="background: #161224; padding: 25px; border-radius: 12px; border: 1px solid rgba(0, 242, 254, 0.3); color: #fff; margin-bottom: 30px; overflow-x: auto;">
+        <h2 style="margin-top: 0; color: #00f2fe; font-size: 1.4rem;">🛍️ Historial de Ventas</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 2px solid rgba(0,242,254,0.4); color: #00f2fe;">
+                    <th style="padding: 10px;"># Orden</th>
+                    <th style="padding: 10px;">Fecha</th>
+                    <th style="padding: 10px;">Detalle de Productos</th>
+                    <th style="padding: 10px; text-align: right;">Total Pagado</th>
+                </tr>
+            </thead>
+            <tbody id="orders-table-body"></tbody>
+        </table>
+    </div>
+
+    <!-- FORMULARIO PARA AGREGAR PRODUCTO -->
+    <div style="background: #161224; padding: 25px; border-radius: 12px; border: 1px solid rgba(255, 0, 85, 0.4); margin-bottom: 30px; color: #fff;">
+        <h2 style="margin-top: 0; color: #ff0055; font-size: 1.4rem;">➕ Agregar Nuevo Producto / Box</h2>
+        <form id="add-product-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px;">
+            <div>
+                <label style="display:block; font-size:0.85rem; color:#aaa; margin-bottom:5px;">Nombre:</label>
+                <input type="text" id="admin-title" required placeholder="Ej: Choco-Shield XL" style="width:100%; padding:10px; background:#0b0813; border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#fff;">
+            </div>
+            <div>
+                <label style="display:block; font-size:0.85rem; color:#aaa; margin-bottom:5px;">Categoría (Franquicia):</label>
+                <input type="text" id="admin-category" required placeholder="Ej: FORTNITE" style="width:100%; padding:10px; background:#0b0813; border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#fff;">
+            </div>
+            <div>
+                <label style="display:block; font-size:0.85rem; color:#aaa; margin-bottom:5px;">Nombre de Imagen (en /images/):</label>
+                <input type="text" id="admin-img" required placeholder="Ej: shield.jpg" style="width:100%; padding:10px; background:#0b0813; border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#fff;">
+            </div>
+            <div>
+                <label style="display:block; font-size:0.85rem; color:#aaa; margin-bottom:5px;">Precio ($ CLP):</label>
+                <input type="number" id="admin-price" required placeholder="Ej: 12990" style="width:100%; padding:10px; background:#0b0813; border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#fff;">
+            </div>
+            <div>
+                <label style="display:block; font-size:0.85rem; color:#aaa; margin-bottom:5px;">Tipo:</label>
+                <select id="admin-type" style="width:100%; padding:10px; background:#0b0813; border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#fff;">
+                    <option value="individual">Individual (Productos)</option>
+                    <option value="box">Box (Promociones)</option>
+                </select>
+            </div>
+            <div style="grid-column: 1 / -1;">
+                <label style="display:block; font-size:0.85rem; color:#aaa; margin-bottom:5px;">Descripción:</label>
+                <textarea id="admin-desc" required rows="2" placeholder="Descripción detallada del producto..." style="width:100%; padding:10px; background:#0b0813; border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#fff;"></textarea>
+            </div>
+            <div style="grid-column: 1 / -1; text-align: right;">
+                <button type="submit" style="background: linear-gradient(135deg, #ff0055, #e63946); color: white; border: none; padding: 12px 25px; font-size: 1rem; font-weight: bold; border-radius: 6px; cursor: pointer;">Guardar Producto</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- TABLA DE PRODUCTOS REGISTRADOS -->
+    <div style="background: #161224; padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: #fff; overflow-x: auto;">
+        <h2 style="margin-top: 0; color: #ffffff; font-size: 1.4rem;">📦 Catálogo Existente</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 2px solid rgba(255,0,85,0.4); color: #00f2fe;">
+                    <th style="padding: 10px;">ID</th>
+                    <th style="padding: 10px;">Producto</th>
+                    <th style="padding: 10px;">Categoría</th>
+                    <th style="padding: 10px;">Tipo</th>
+                    <th style="padding: 10px;">Precio</th>
+                    <th style="padding: 10px; text-align: center;">Acción</th>
+                </tr>
+            </thead>
+            <tbody id="admin-table-body"></tbody>
+        </table>
+    </div>
+</main>
+
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-col brand-col">
+            <a href="../index.html" class="logo logo-footer">
+                <span class="logo-game">GAME</span>
+                <span class="logo-bites">BITES</span>
+                <span class="logo-icon">🎮🍫</span>
+            </a>
+            <p class="footer-address">Av. Tobalaba 720 / Santiago</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 GameBites - Panel de Administración.</p>
+    </div>
+</footer>
+
+<script src="../scripts/script.js"></script>
+</body>
+</html>

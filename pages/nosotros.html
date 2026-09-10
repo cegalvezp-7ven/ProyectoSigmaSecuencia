@@ -21,44 +21,70 @@
         </section>
         <section class="nav-links-section">
             <a href="../index.html">Inicio</a>
-            <a href="nosotros.html">Nosotros</a>
+            <a href="nosotros.html" class="active">Nosotros</a>
             <a href="promociones.html">Promociones</a>
             <a href="productos.html">Productos</a>
             <a href="contacto.html">Contacto</a>
         </section>
         <section class="user-section">
             <a href="carrito.html" class="cart-link">🛒 <span>Carrito</span> <span class="cart-count">0</span></a>
-            <a href="login.html" class="btn-login">Iniciar Sesión</a>
+            <div id="user-nav-container">
+                <a href="login.html" class="btn-login">Iniciar Sesión</a>
+            </div>
         </section>
     </nav>
 </header>
+
 <section class="page-hero">
     <h1>Sobre GameBites</h1>
-    <p>Chocolate artesanal con espíritu gamer.</p>
+    <p>Conoce la historia detrás de nuestro proyecto.</p>
 </section>
-<main class="main-container">
-    <div class="content-card reveal">
-        <h2>Nuestra idea</h2>
-        <p>GameBites nace para unir dos mundos: la cultura de los videojuegos y la chocolatería artesanal. Creamos productos inspirados en universos gamer, cuidando tanto la presentación como el sabor.</p>
+
+<main class="main-container" style="max-width: 850px; margin: 0 auto; padding: 40px 20px; color: #ffffff;">
+    <div style="background: #161224; padding: 35px; border-radius: 16px; border: 1px solid rgba(255, 0, 85, 0.4); box-shadow: 0 0 25px rgba(255, 0, 85, 0.15);">
+        <p style="line-height: 1.9; color: #e0e0e0; font-size: 1.1rem; margin: 0; text-align: justify;">
+            Somos tres estudiantes que llegaron a Full Stack 2 con cero conocimientos previos y una sola meta clara: pasar el ramo. ¿Cómo? La verdad no sabemos cómo llegamos hasta acá, pero somos sinceros y eso es lo importante. La idea de GameBites nació gracias al profe Bayron.
+        </p>
     </div>
-    <div class="info-grid">
-        <div class="content-card reveal">
-            <h3>🎮 Identidad</h3>
-            <p>Diseños inspirados en videojuegos y cultura pop.</p>
-        </div>
-        <div class="content-card reveal">
-            <h3>🍫 Calidad</h3>
-            <p>Productos pensados para disfrutar y coleccionar.</p>
-        </div>
-        <div class="content-card reveal">
-            <h3>⚡ Experiencia</h3>
-            <p>Una tienda simple, moderna y entretenida.</p>
-        </div>
+</main>
 
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-col brand-col">
+            <a href="../index.html" class="logo logo-footer">
+                <span class="logo-game">GAME</span>
+                <span class="logo-bites">BITES</span>
+                <span class="logo-icon">🎮🍫</span>
+            </a>
+            <p class="footer-address">Av. Tobalaba 720 / Santiago</p>
+        </div>
+        <div class="footer-col">
+            <h4>Productos</h4>
+            <ul>
+                <li><a href="productos.html">Bombones Gamer</a></li>
+                <li><a href="promociones.html">Boxes</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>GameBites</h4>
+            <ul>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="promociones.html">Promociones</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Servicio al Cliente</h4>
+            <ul>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="faq.html">Preguntas Frecuentes</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 GameBites - Proyecto Full Stack 2.</p>
+    </div>
+</footer>
 
-<footer class="main-footer"><div class="footer-container"><div class="footer-col brand-col"><a href="../index.html" class="logo logo-footer"><span class="logo-game">GAME</span><span class="logo-bites">BITES</span><span class="logo-icon">🎮🍫</span></a><p class="footer-address">Av. Tobalaba 720 / Santiago</p><div class="social-links"><a href="contacto.html">Instagram</a></div></div>
-<div class="footer-col"><h4>Productos</h4><ul><li><a href="productos.html">Bombones Gamer</a></li><li><a href="productos.html">Boxes</a></li><li><a href="productos.html">Ediciones Limitadas</a></li></ul></div>
-<div class="footer-col"><h4>GameBites</h4><ul><li><a href="nosotros.html">Nosotros</a></li><li><a href="promociones.html">Promociones</a></li></ul></div>
-<div class="footer-col"><h4>Servicio al Cliente</h4><ul><li><a href="contacto.html">Contacto</a></li><li><a href="faq.html">Preguntas Frecuentes</a></li></ul></div></div>
-<div class="footer-bottom"><p>&copy; 2026 GameBites - Chocolatería Gamer. Todos los derechos reservados.</p></div></footer>
-<script src="../scripts/script.js"></script></body></html>
+<script src="../scripts/script.js"></script>
+</body>
+</html>

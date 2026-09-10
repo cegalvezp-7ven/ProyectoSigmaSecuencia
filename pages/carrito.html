@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito de compras | GameBites</title>
+    <title>Carrito de Compras | GameBites</title>
     <link rel="stylesheet" href="../styles/global.css">
     <link rel="stylesheet" href="../styles/header.css">
     <link rel="stylesheet" href="../styles/caluga.css">
@@ -28,7 +28,9 @@
         </section>
         <section class="user-section">
             <a href="carrito.html" class="cart-link active">🛒 <span>Carrito</span> <span class="cart-count">0</span></a>
-            <a href="login.html" class="btn-login">Iniciar Sesión</a>
+            <div id="user-nav-container">
+                <a href="login.html" class="btn-login">Iniciar Sesión</a>
+            </div>
         </section>
     </nav>
 </header>
@@ -39,10 +41,10 @@
 </section>
 
 <main class="main-container" style="max-width: 900px; margin: 0 auto; padding: 20px;">
-    <!-- El script.js renderizará los productos guardados en este contenedor -->
+    <!-- Productos del carrito -->
     <div id="cart-items" class="cart-list" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;"></div>
 
-    <!-- Resumen y precio total -->
+    <!-- Resumen de pago y botón de checkout -->
     <div class="cart-summary" style="display: flex; justify-content: space-between; align-items: center; background: #161224; padding: 20px 30px; border-radius: 12px; border: 1px solid rgba(255, 0, 85, 0.3);">
         <div>
             <h3 style="margin: 0; color: #aaa; font-size: 1rem;">Total a pagar:</h3>
@@ -50,7 +52,7 @@
         </div>
         <div style="display: flex; gap: 15px;">
             <a class="btn-primary" href="productos.html" style="padding: 12px 20px; background: transparent; border: 1px solid #00f2fe; color: #00f2fe; text-decoration: none; border-radius: 8px; font-weight: bold;">Continuar compra</a>
-            <button onclick="alert('¡Gracias por tu compra gamer!')" style="padding: 12px 25px; background: linear-gradient(135deg, #ff0055, #e63946); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);">Finalizar Compra</button>
+            <button onclick="processCheckout()" style="padding: 12px 25px; background: linear-gradient(135deg, #ff0055, #e63946); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);">Finalizar Compra</button>
         </div>
     </div>
 </main>
@@ -64,14 +66,12 @@
                 <span class="logo-icon">🎮🍫</span>
             </a>
             <p class="footer-address">Av. Tobalaba 720 / Santiago</p>
-            <div class="social-links"><a href="contacto.html">Instagram</a></div>
         </div>
         <div class="footer-col">
             <h4>Productos</h4>
             <ul>
                 <li><a href="productos.html">Bombones Gamer</a></li>
                 <li><a href="promociones.html">Boxes</a></li>
-                <li><a href="promociones.html">Ediciones Limitadas</a></li>
             </ul>
         </div>
         <div class="footer-col">
