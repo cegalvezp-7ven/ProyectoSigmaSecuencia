@@ -23,7 +23,11 @@ const PRODUCTS = [
 
 // --- GESTIÓN DE CARRITO (localStorage) ---
 function getCart() {
-  return JSON.parse(localStorage.getItem('gamebites_cart') || '[]');
+  try {
+    return JSON.parse(localStorage.getItem('gamebites_cart') || '[]');
+  } catch (e) {
+    return [];
+  }
 }
 
 function saveCart(cart) {
@@ -33,19 +37,21 @@ function saveCart(cart) {
 
 function updateCartCount() {
   const cart = getCart();
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
   document.querySelectorAll('.cart-count').forEach(el => {
     el.textContent = totalItems;
   });
 }
 
-// --- LOGICA DE RENDERIZADO DOM ---
+// --- LÓGICA DE INICIALIZACIÓN ---
 document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
 
   const productsContainer = document.getElementById("products-grid");
   const promoContainer = document.getElementById("promotions-grid");
   const detailContainer = document.getElementById("product-detail");
+  const cartItemsContainer = document.getElementById("cart-items");
+  const cartTotalContainer = document.getElementById("cart-total");
 
   const isPagesDir = window.location.pathname.toLowerCase().includes("pages");
 
@@ -65,16 +71,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (product) {
       renderDetailView(product, detailContainer, isPagesDir);
-    } else {
-      detailContainer.style.opacity = "1";
-      detailContainer.innerHTML = `
-        <div style="text-align:center; padding: 50px 20px; width: 100%; color: #fff;">
-          <h2>Producto no encontrado</h2>
-          <p>El producto seleccionado no existe en nuestro catálogo.</p>
-          <a href="productos.html" style="display:inline-block; margin-top:15px; padding:10px 20px; background:#ff0055; color:#fff; text-decoration:none; border-radius:6px; font-weight:bold;">Volver al Catálogo</a>
-        </div>
-      `;
     }
+  }
+
+  if (cartItemsContainer) {
+    renderCartView(cartItemsContainer, cartTotalContainer, isPagesDir);
   }
 });
 
@@ -106,7 +107,6 @@ function renderDetailView(product, container, isPagesDir) {
   const imagePath = isPagesDir ? `../images/${img}` : `images/${img}`;
   const backPath = isPagesDir ? `productos.html` : `pages/productos.html`;
 
-  // Forzar visibilidad inmediata
   container.style.opacity = "1";
   container.style.visibility = "visible";
 
@@ -117,21 +117,19 @@ function renderDetailView(product, container, isPagesDir) {
       </div>
       <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 15px;">
         <div>
-          <span style="background: #00f2fe; color: #000; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">${category}</span>
+          <span style="background: #00f2fe; color: #000; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase;">${category}</span>
         </div>
         <h1 style="font-size: 2.2rem; font-weight: 800; color: #ffffff; margin: 5px 0;">${title}</h1>
         <p style="font-size: 1.8rem; font-weight: 800; color: #ff0055; margin: 0;">$${price.toLocaleString("es-CL")}</p>
         <p style="font-size: 1.05rem; line-height: 1.7; color: #d0d0d0; margin: 10px 0;">${desc}</p>
         
-        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; margin-top: 10px;">
-          <!-- Selector de Cantidad - / + -->
+        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
           <div style="display: flex; align-items: center; background: #0b0813; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; overflow: hidden;">
             <button type="button" onclick="changeQty(-1)" style="width: 40px; height: 45px; background: rgba(255,255,255,0.08); color: #fff; border: none; font-size: 1.3rem; font-weight: bold; cursor: pointer;">-</button>
             <input type="number" id="product-qty" value="1" min="1" max="99" readonly style="width: 50px; height: 45px; background: transparent; color: #fff; border: none; text-align: center; font-size: 1.1rem; font-weight: bold;">
             <button type="button" onclick="changeQty(1)" style="width: 40px; height: 45px; background: rgba(255,255,255,0.08); color: #fff; border: none; font-size: 1.3rem; font-weight: bold; cursor: pointer;">+</button>
           </div>
 
-          <!-- Botón de Compra -->
           <button onclick="addToCartFromDetail(${id})" style="background: linear-gradient(135deg, #ff0055, #e63946); color: white; border: none; padding: 14px 28px; font-size: 1rem; font-weight: 800; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);">
             🛒 Agregar al Carrito
           </button>
@@ -149,7 +147,73 @@ function renderDetailView(product, container, isPagesDir) {
   `;
 }
 
-// Interacciones globales para la vista de detalle
+// --- RENDERIZADO DEL CARRITO DE COMPRAS ---
+function renderCartView(cartContainer, totalContainer, isPagesDir) {
+  const cart = getCart();
+
+  if (!cart || cart.length === 0) {
+    cartContainer.innerHTML = `
+      <div style="text-align:center; padding: 40px 20px; color: #fff; background: #161224; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+        <p style="font-size: 1.2rem; margin-bottom: 15px;">Tu carrito está vacío 🍫</p>
+        <a href="productos.html" style="background: #ff0055; color:#fff; padding:10px 20px; text-decoration:none; border-radius:6px; font-weight:bold; display:inline-block;">Explorar Catálogo</a>
+      </div>
+    `;
+    if (totalContainer) totalContainer.textContent = "$0";
+    return;
+  }
+
+  let grandTotal = 0;
+  let validItemsCount = 0;
+
+  const itemsHTML = cart.map(item => {
+    // Comparación flexible (==) para aceptar ID tipo String y Number
+    const product = PRODUCTS.find(p => p[0] == item.id);
+    if (!product) return "";
+
+    validItemsCount++;
+    const [id, title, category, img, price] = product;
+    const qty = parseInt(item.quantity) || 1;
+    const subtotal = price * qty;
+    grandTotal += subtotal;
+    const imagePath = isPagesDir ? `../images/${img}` : `images/${img}`;
+
+    return `
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; background: #161224; padding: 15px 25px; border-radius: 12px; border: 1px solid rgba(255, 0, 85, 0.3); flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <img src="${imagePath}" alt="${title}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+          <div>
+            <h4 style="margin: 0; color: #fff; font-size: 1.1rem;">${title}</h4>
+            <p style="margin: 5px 0 0 0; color: #ff0055; font-weight: bold;">$${price.toLocaleString("es-CL")} c/u</p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <div style="display: flex; align-items: center; background: #0b0813; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; overflow: hidden;">
+            <button onclick="updateCartItemQty(${id}, -1)" style="width:32px; height:35px; background:rgba(255,255,255,0.08); color:#fff; border:none; font-weight:bold; cursor:pointer;">-</button>
+            <span style="width:35px; text-align:center; color:#fff; font-weight:bold;">${qty}</span>
+            <button onclick="updateCartItemQty(${id}, 1)" style="width:32px; height:35px; background:rgba(255,255,255,0.08); color:#fff; border:none; font-weight:bold; cursor:pointer;">+</button>
+          </div>
+          <span style="color: #00f2fe; font-weight: bold; font-size: 1.1rem; min-width: 100px; text-align: right;">$${subtotal.toLocaleString("es-CL")}</span>
+          <button onclick="removeCartItem(${id})" style="background: transparent; color: #ff0055; border: none; font-size: 1.3rem; cursor: pointer; padding: 5px;">🗑️</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (validItemsCount === 0) {
+    localStorage.removeItem('gamebites_cart');
+    updateCartCount();
+    renderCartView(cartContainer, totalContainer, isPagesDir);
+    return;
+  }
+
+  cartContainer.innerHTML = itemsHTML;
+  if (totalContainer) {
+    totalContainer.textContent = `$${grandTotal.toLocaleString("es-CL")}`;
+  }
+}
+
+// --- FUNCIONES INTERACTIVAS GLOBALES ---
 window.changeQty = function(delta) {
   const input = document.getElementById("product-qty");
   if (!input) return;
@@ -165,12 +229,12 @@ window.addToCartFromDetail = function(productId) {
   const qty = input ? parseInt(input.value) || 1 : 1;
 
   const cart = getCart();
-  const existingIndex = cart.findIndex(item => item.id === productId);
+  const existingIndex = cart.findIndex(item => item.id == productId);
 
   if (existingIndex > -1) {
-    cart[existingIndex].quantity += qty;
+    cart[existingIndex].quantity = (parseInt(cart[existingIndex].quantity) || 0) + qty;
   } else {
-    cart.push({ id: productId, quantity: qty });
+    cart.push({ id: parseInt(productId), quantity: qty });
   }
 
   saveCart(cart);
@@ -180,4 +244,30 @@ window.addToCartFromDetail = function(productId) {
     msg.style.display = "block";
     setTimeout(() => { msg.style.display = "none"; }, 3000);
   }
+};
+
+window.updateCartItemQty = function(productId, delta) {
+  let cart = getCart();
+  const item = cart.find(i => i.id == productId);
+  if (item) {
+    item.quantity = (parseInt(item.quantity) || 1) + delta;
+    if (item.quantity <= 0) {
+      cart = cart.filter(i => i.id != productId);
+    }
+  }
+  saveCart(cart);
+  const cartItemsContainer = document.getElementById("cart-items");
+  const cartTotalContainer = document.getElementById("cart-total");
+  const isPagesDir = window.location.pathname.toLowerCase().includes("pages");
+  if (cartItemsContainer) renderCartView(cartItemsContainer, cartTotalContainer, isPagesDir);
+};
+
+window.removeCartItem = function(productId) {
+  let cart = getCart();
+  cart = cart.filter(i => i.id != productId);
+  saveCart(cart);
+  const cartItemsContainer = document.getElementById("cart-items");
+  const cartTotalContainer = document.getElementById("cart-total");
+  const isPagesDir = window.location.pathname.toLowerCase().includes("pages");
+  if (cartItemsContainer) renderCartView(cartItemsContainer, cartTotalContainer, isPagesDir);
 };
