@@ -1,11 +1,11 @@
-/* Grilla Responsiva de Productos */
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 2rem;
 }
 
-/* Tarjeta Cuadrada Interactivas */
+
 .caluga-card {
   background: var(--card-bg);
   border: 1px solid #381d42;
@@ -19,14 +19,14 @@
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Efecto al pasar el mouse por la tarjeta */
+
 .caluga-card:hover {
   transform: translateY(-8px);
   border-color: var(--neon-pink);
   box-shadow: 0 10px 20px rgba(255, 42, 133, 0.25);
 }
 
-/* Etiqueta flotante del Videojuego */
+
 .card-badge {
   position: absolute;
   top: 12px;
@@ -42,7 +42,7 @@
   text-transform: uppercase;
 }
 
-/* Marco de la Imagen (Cuadrado) */
+
 .card-img-wrapper {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -64,7 +64,7 @@
   transform: scale(1.08);
 }
 
-/* Información del producto dentro de la tarjeta */
+
 .card-content {
   padding: 1.2rem;
   display: flex;
@@ -87,7 +87,7 @@
   margin-bottom: 1.2rem;
 }
 
-/* Pie de la tarjeta (Precio y Botón) */
+
 .card-footer {
   display: flex;
   align-items: center;
@@ -117,7 +117,7 @@
   color: #000000;
 }
 
-/* Tablets y Celulares (<= 768px) */
+
 @media (max-width: 768px) {
   .product-grid {
     gap: 1.2rem;
@@ -137,14 +137,14 @@
   }
 }
 
-/* Pantallas Pequeñas (<= 480px) */
+
 @media (max-width: 480px) {
   .product-grid {
-    grid-template-columns: 1fr; /* Una sola columna vertical */
+    grid-template-columns: 1fr; 
   }
 }
 
-/* Pantallas Micro (<= 320px / 240px) */
+
 @media (max-width: 320px) {
   .product-grid {
     gap: 0.8rem;

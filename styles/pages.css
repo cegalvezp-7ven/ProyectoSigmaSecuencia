@@ -115,9 +115,10 @@
     width:80px;
     height:80px;
     object-fit:cover;
-    border-radius：8px
+    border-radius:8px
 }
-.cart-item-info span{
+
+.cart-item-info span {
     color:var(--text-sub);
 }
 .quantity{
@@ -180,9 +181,9 @@ button.btn-primary{
 }
 
 
-/* Tablets y Celulares (<= 768px) */
+
 @media (max-width: 768px) {
-  /* Detalle de Producto: pasa de 2 columnas a 1 columna vertical */
+  
   .product-detail-container {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -193,14 +194,14 @@ button.btn-primary{
     object-fit: cover;
   }
 
-  /* Formularios (Contacto y Login) */
+  
   .form-container {
     padding: 1.5rem;
     max-width: 100%;
   }
 }
 
-/* Pantallas Pequeñas (<= 480px) */
+
 @media (max-width: 480px) {
   .product-detail-title {
     font-size: 1.4rem;
@@ -214,12 +215,12 @@ button.btn-primary{
   }
 
   .btn-submit {
-    width: 100%; /* Botón de envío a ancho completo */
+    width: 100%; 
     padding: 0.7rem;
   }
 }
 
-/* Pantallas Micro (<= 320px / 240px) */
+
 @media (max-width: 320px) {
   .product-detail-container,
   .form-container {

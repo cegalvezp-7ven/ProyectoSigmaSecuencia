@@ -1,4 +1,3 @@
-// --- BASE DE DATOS INICIAL ---
 const DEFAULT_PRODUCTS = [
   [1, "PokéBall Surprise", "POKÉMON", "pokeball.jpg", 12990, "Esfera de chocolate de leche con centro cremoso de maracuyá y trufas de avellana.", "individual"],
   [2, "Bloque Redstone", "MINECRAFT", "redstone.jpg", 8990, "Cubo artesanal de chocolate blanco con menta suave y corazón crujiente de frambuesa.", "individual"],
@@ -33,7 +32,7 @@ function saveProducts(products) {
 
 let PRODUCTS = getProducts();
 
-// --- SESIÓN DE USUARIO Y CARRITO ---
+
 function getCurrentUser() {
   try {
     return JSON.parse(localStorage.getItem('gamebites_user'));
@@ -79,44 +78,71 @@ function getOrders() {
   }
 }
 
-// --- ACTUALIZAR HEADER SEGÚN SESIÓN ---
+
 function renderUserHeader(isPagesDir) {
   const userContainer = document.getElementById('user-nav-container');
   if (!userContainer) return;
 
   const user = getCurrentUser();
   const loginPath = isPagesDir ? 'login.html' : 'pages/login.html';
+  const accountPath = isPagesDir ? 'cuenta.html' : 'pages/cuenta.html';
   const adminPath = isPagesDir ? 'admin.html' : 'pages/admin.html';
 
   if (user) {
-    let extraBtn = '';
     if (user.role === 'admin') {
-      extraBtn = `<a href="${adminPath}" class="btn-login" style="background:#00f2fe; color:#000; margin-right:8px;">⚙️ Admin</a>`;
+      userContainer.innerHTML = `
+        <a href="${adminPath}" class="user-name-btn admin" title="Panel de Administración">
+           <span>${user.name || 'Admin'}</span>
+        </a>
+        <button onclick="logoutUser()" class="logout-btn">Salir</button>
+      `;
+    } else {
+      userContainer.innerHTML = `
+        <a href="${accountPath}" class="user-name-btn client" title="Mi cuenta">
+           <span>${user.name || 'Gamer'}</span>
+        </a>
+        <button onclick="logoutUser()" class="logout-btn">Salir</button>
+      `;
     }
-    userContainer.innerHTML = `
-      <div style="display:flex; align-items:center; gap:8px;">
-        ${extraBtn}
-        <span style="color:#fff; font-size:0.85rem; font-weight:bold;">👤 ${user.name || 'Gamer'}</span>
-        <button onclick="logoutUser()" style="background:transparent; border:1px solid rgba(255,255,255,0.3); color:#ff0055; padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer; font-weight:bold;">Salir</button>
-      </div>
-    `;
   } else {
     userContainer.innerHTML = `<a href="${loginPath}" class="btn-login">Iniciar Sesión</a>`;
   }
 }
-
 window.logoutUser = function() {
   setCurrentUser(null);
   window.location.reload();
 };
 
-// --- DOM READY ---
+
 document.addEventListener("DOMContentLoaded", () => {
   PRODUCTS = getProducts();
   updateCartCount();
 
   const isPagesDir = window.location.pathname.toLowerCase().includes("pages");
   renderUserHeader(isPagesDir);
+
+  
+  const menuToggle = document.getElementById("menu-toggle");
+  const navLinks = document.querySelector(".nav-links-section");
+
+  if (menuToggle && navLinks) {
+    menuToggle.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("menu-open");
+      menuToggle.classList.toggle("active", isOpen);
+      menuToggle.textContent = isOpen ? "" : "";
+      menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      menuToggle.setAttribute("aria-label", isOpen ? "Cerrar menú" : "Abrir menú");
+    });
+
+    navLinks.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("menu-open");
+        menuToggle.classList.remove("active");
+        menuToggle.textContent = "";
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
 
   const productsContainer = document.getElementById("products-grid");
   const promoContainer = document.getElementById("promotions-grid");
@@ -129,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("login-form");
   const contactForm = document.getElementById("contact-form");
 
-  // FORMULARIO DE CONTACTO
+  
   if (contactForm) {
     contactForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -142,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // FORMULARIO DE LOGIN
+  
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -259,12 +285,12 @@ function renderDetailView(product, container, isPagesDir) {
           </div>
 
           <button onclick="addToCartFromDetail(${id})" style="background: linear-gradient(135deg, #ff0055, #e63946); color: white; border: none; padding: 14px 28px; font-size: 1rem; font-weight: 800; border-radius: 8px; cursor: pointer;">
-            🛒 Agregar al Carrito
+             Agregar al Carrito
           </button>
         </div>
 
         <div id="cart-msg" style="display: none; color: #00f2fe; font-weight: bold; margin-top: 10px;">
-          ✔ ¡Producto agregado al carrito exitosamente!
+           ¡Producto agregado al carrito exitosamente!
         </div>
 
         <div style="margin-top: 25px;">
@@ -281,7 +307,7 @@ function renderCartView(cartContainer, totalContainer, isPagesDir) {
   if (!cart || cart.length === 0) {
     cartContainer.innerHTML = `
       <div style="text-align:center; padding: 40px 20px; color: #fff; background: #161224; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-        <p style="font-size: 1.2rem; margin-bottom: 15px;">Tu carrito está vacío 🍫</p>
+        <p style="font-size: 1.2rem; margin-bottom: 15px;">Tu carrito está vacío </p>
         <a href="productos.html" style="background: #ff0055; color:#fff; padding:10px 20px; text-decoration:none; border-radius:6px; font-weight:bold; display:inline-block;">Explorar Catálogo</a>
       </div>
     `;
@@ -318,7 +344,7 @@ function renderCartView(cartContainer, totalContainer, isPagesDir) {
             <button onclick="updateCartItemQty(${id}, 1)" style="width:32px; height:35px; background:rgba(255,255,255,0.08); color:#fff; border:none; font-weight:bold; cursor:pointer;">+</button>
           </div>
           <span style="color: #00f2fe; font-weight: bold; font-size: 1.1rem; min-width: 100px; text-align: right;">$${subtotal.toLocaleString("es-CL")}</span>
-          <button onclick="removeCartItem(${id})" style="background: transparent; color: #ff0055; border: none; font-size: 1.3rem; cursor: pointer; padding: 5px;">🗑️</button>
+          <button onclick="removeCartItem(${id})" style="background: transparent; color: #ff0055; border: none; font-size: 1.3rem; cursor: pointer; padding: 5px;"></button>
         </div>
       </div>
     `;
@@ -337,7 +363,7 @@ function renderAdminTable(tbody) {
         <td style="padding: 12px 10px;">${id}</td>
         <td style="padding: 12px 10px; font-weight: bold;">${title}</td>
         <td style="padding: 12px 10px; color: #00f2fe;">${category}</td>
-        <td style="padding: 12px 10px;">${type === 'box' ? '🎁 Box' : '🍫 Individual'}</td>
+        <td style="padding: 12px 10px;">${type === 'box' ? ' Box' : ' Individual'}</td>
         <td style="padding: 12px 10px; color: #ff0055; font-weight: bold;">$${price.toLocaleString("es-CL")}</td>
         <td style="padding: 12px 10px; text-align: center;">
           <button onclick="deleteProductFromAdmin(${id})" style="background: transparent; color: #ff0055; border: 1px solid #ff0055; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">Eliminar</button>
@@ -376,7 +402,7 @@ function renderOrdersTable(tbody) {
   `).join("");
 }
 
-// FUNCIONES INTERACTIVAS
+
 window.changeQty = function(delta) {
   const input = document.getElementById("product-qty");
   if (!input) return;
@@ -449,7 +475,7 @@ window.processCheckout = function() {
   const currentUser = getCurrentUser();
 
   if (!currentUser) {
-    alert("⚠️ Debes iniciar sesión para realizar la compra.");
+    alert(" Debes iniciar sesión para realizar la compra.");
     window.location.href = isPagesDir ? "login.html" : "pages/login.html";
     return;
   }

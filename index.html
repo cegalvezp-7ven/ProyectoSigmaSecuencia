@@ -5,24 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GameBites | Chocolates de Videojuegos</title>
   
-  <!-- Hojas de estilo vinculadas -->
+  
   <link rel="stylesheet" href="styles/global.css">
   <link rel="stylesheet" href="styles/header.css">
   <link rel="stylesheet" href="styles/caluga.css">
 </head>
 <body>
 
-  <!-- Encabezado con navegación -->
+  
   <header>
     <nav>
-      <!-- Logo en Texto Neón -->
+      
       <section class="brand-section">
         <a href="index.html" class="logo">
-          <span class="logo-game">GAME</span><span class="logo-bites">BITES</span><span class="logo-icon">🎮🍫</span>
+          <span class="logo-game">GAME</span><span class="logo-bites">BITES</span><span class="logo-icon"></span>
         </a>
       </section>
 
-      <!-- Enlaces de navegación -->
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false"></button>
+
+      
       <section class="nav-links-section">
         <a href="index.html" class="active">Inicio</a>
         <a href="pages/nosotros.html">Nosotros</a>
@@ -31,14 +33,15 @@
         <a href="pages/contacto.html">Contacto</a>
       </section>
 
-      <!-- Acceso de usuario -->
+      
       <section class="user-section">
-        <a href="pages/login.html" class="btn-login">Iniciar Sesión</a>
+        <a href="pages/carrito.html" class="cart-link"> <span>Carrito</span> <span class="cart-count">0</span></a>
+        <div id="user-nav-container"></div>
       </section>
     </nav>
   </header>
 
-  <!-- Banner Hero Principal -->
+  
   <section class="hero-banner">
     <div class="hero-content">
       <span class="badge">Edición Coleccionista</span>
@@ -48,13 +51,13 @@
     </div>
   </section>
 
-  <!-- Catálogo de Productos Completo (8 Calugas) -->
+  
   <main class="main-container">
     <h2 class="section-title">Productos Destacados</h2>
     
     <div class="product-grid">
       
-      <!-- Caluga : Pokémon -->
+      
       <a href="pages/producto.html?id=1" class="caluga-card">
         <div class="card-badge">POKÉMON</div>
         <div class="card-img-wrapper">
@@ -70,7 +73,7 @@
         </div>
       </a>
 
-      <!-- Caluga : Minecraft -->
+      
       <a href="pages/producto.html?id=2" class="caluga-card">
         <div class="card-badge">MINECRAFT</div>
         <div class="card-img-wrapper">
@@ -86,7 +89,7 @@
         </div>
       </a>
 
-      <!-- Caluga 3: Mortal Kombat -->
+      
       <a href="pages/producto.html?id=3" class="caluga-card">
         <div class="card-badge">MORTAL KOMBAT</div>
         <div class="card-img-wrapper">
@@ -102,7 +105,7 @@
         </div>
       </a>
 
-      <!-- Caluga 4: Arcade Classics -->
+      
       <a href="pages/producto.html?id=4" class="caluga-card">
         <div class="card-badge">ARCADE CLASSICS</div>
         <div class="card-img-wrapper">
@@ -118,7 +121,7 @@
         </div>
       </a>
 
-      <!-- Caluga 5: Mario Kart -->
+      
       <a href="pages/producto.html?id=5" class="caluga-card">
         <div class="card-badge">MARIO KART</div>
         <div class="card-img-wrapper">
@@ -134,7 +137,7 @@
         </div>
       </a>
 
-      <!-- Caluga 6: League of Legends -->
+      
       <a href="pages/producto.html?id=6" class="caluga-card">
         <div class="card-badge">LEAGUE OF LEGENDS</div>
         <div class="card-img-wrapper">
@@ -150,7 +153,7 @@
         </div>
       </a>
 
-      <!-- Caluga 7: Zelda -->
+      
       <a href="pages/producto.html?id=7" class="caluga-card">
         <div class="card-badge">ZELDA</div>
         <div class="card-img-wrapper">
@@ -166,7 +169,7 @@
         </div>
       </a>
 
-      <!-- Caluga 8: Fortnite -->
+      
       <a href="pages/producto.html?id=8" class="caluga-card">
         <div class="card-badge">FORTNITE</div>
         <div class="card-img-wrapper">
@@ -185,14 +188,14 @@
     </div>
   </main>
 
-  <!-- Pie de Página -->
+  
   <footer class="main-footer">
     <div class="footer-container">
       
-      <!-- Columna 1: Marca y Ubicación -->
+      
       <div class="footer-col brand-col">
         <a href="index.html" class="logo logo-footer">
-          <span class="logo-game">GAME</span><span class="logo-bites">BITES</span><span class="logo-icon">🎮🍫</span>
+          <span class="logo-game">GAME</span><span class="logo-bites">BITES</span><span class="logo-icon"></span>
         </a>
         <p class="footer-address"> Av. Tobalaba 720 / Santiago</p>
         <div class="social-links">
@@ -200,7 +203,7 @@
         </div>
       </div>
 
-      <!-- Columna 2: Productos -->
+      
       <div class="footer-col">
         <h4>Productos</h4>
         <ul>
@@ -210,7 +213,7 @@
         </ul>
       </div>
 
-      <!-- Columna 3: Empresa -->
+      
       <div class="footer-col">
         <h4>GameBites</h4>
         <ul>
@@ -219,7 +222,7 @@
         </ul>
       </div>
 
-      <!-- Columna 4: Soporte -->
+      
       <div class="footer-col">
         <h4>Servicio al Cliente</h4>
         <ul>
@@ -235,5 +238,6 @@
     </div>
   </footer>
 
+<script src="scripts/script.js"></script>
 </body>
 </html>
